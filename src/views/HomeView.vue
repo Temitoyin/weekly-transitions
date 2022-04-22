@@ -76,6 +76,7 @@ export default {
 <style scoped>
 .main {
   position: relative;
+  background: #e6b69e;
 }
 .home {
   display: flex;

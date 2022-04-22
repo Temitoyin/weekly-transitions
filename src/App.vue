@@ -1,10 +1,11 @@
 <script setup>
-import HomeView from "@/views/HomeView.vue";
+// import HomeView from "@/views/HomeView.vue";
+// import Advert from "@/views/AdvertView.vue";
 </script>
 
 <template>
   <div class="container">
-    <HomeView />
+    <router-view></router-view>
   </div>
 </template>
 
