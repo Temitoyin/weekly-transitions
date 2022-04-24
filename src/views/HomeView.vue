@@ -7,9 +7,11 @@ import Flower3 from "../assets/flower3.jpg";
 import Flower4 from "../assets/flower4.jpg";
 
 import { gsap } from "gsap";
+import { Flip } from 'gsap/Flip';
 import { ref, onMounted } from "vue";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(Flip);
 
 export default {
    data() {
@@ -17,16 +19,49 @@ export default {
       images: [ Flower1, Flower2,Flower3, Flower4],
     };
   },
+  el: "#image",
   components: {
     Navigation,
     Flower
   },
+  methods:{
+      openContent(image,event){
+        if (event) {
+      event.preventDefault()
+    }
+         // Get state
+         const state = Flip.getState(image);
+        // Change place
+        imageDiv.value.appendChild(image);
+        // Flip
+        Flip.from(state, {
+            duration: 1.2,
+            ease: 'power4.inOut',
+            absolute: true
+        });
+      }
+    },
   setup() {
     const home = ref(null);
     const progress = ref(null);
-   
+    const image = ref(null);
+    const imageDiv = ref(null);
+    const text = ref(null);
+    const images = [document.querySelectorAll('#image')];
     onMounted(() => {
-      console.log(home.value, "home vlaue");
+      // this.$el.addEventListener('click', console.log($el, 'element'));
+
+//       console.log(home.value, "home vlaue");
+//       console.log(image, 'images');
+//       images.forEach((image) => {  
+//     //     image.addEventListener('click', (e) => {
+//     //     openContent(image, e);
+//     // }
+//     // );
+//     console.log(image, 'image');
+// }
+// );
+    
       gsap.to(home.value, {
         x: () =>
           -(home.value.scrollWidth - document.documentElement.clientWidth) +
@@ -57,10 +92,14 @@ export default {
 </script>
 
 <template>
+    <div class="imageWrapper">
+      <div class="text" ref="text"></div>
+      <div class="imagePosition" ref="imageDiv"></div>
+    </div>
   <main class="main" >
     <Navigation />
     <div class="home" id="home" ref="home">
-      <div class="item" v-for="image in images">
+      <div class="item" v-for="image in images" id="image" ref="image">
       <Flower
       :key="image"
       :image="image"
@@ -78,6 +117,23 @@ export default {
   position: relative;
   background: #e6b69e;
 }
+.text{
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  height: 100vh;
+  width: 50%;
+}
+.imagePosition{
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 1;
+  height: 100vh;
+  width: 50%;
+  /* background-color: green; */
+}
 .home {
   display: flex;
   position: fixed;
@@ -85,6 +141,9 @@ export default {
   width: 200%;
   overscroll-behavior: none;
   z-index: 2;
+}
+img{
+  z-index: 6;
 }
 h2 {
   position: fixed;
